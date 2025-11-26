@@ -1,0 +1,63 @@
+# ----------------------------
+# Python
+# ----------------------------
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pkl
+*.log
+
+# Virtual environments
+env/
+venv/
+.venv/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# pytest
+.cache/
+
+# ----------------------------
+# FastAPI / Uvicorn
+# ----------------------------
+*.db
+*.sqlite
+instance/
+*.pid
+
+# ----------------------------
+# Docker
+# ----------------------------
+# Do NOT ignore the Dockerfile or docker-compose.yml
+# Ignore build cache & artifacts
+docker-build/
+*.tar
+
+# ----------------------------
+# Environment variables
+# ----------------------------
+.env
+.env.*
+!.env.example
+
+# ----------------------------
+# OS / Editor Files
+# ----------------------------
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# ----------------------------
+# Temporary Files
+# ----------------------------
+tmp/
+temp/
+*.tmp
+
+# Docling temp data (if ever created)
+docling_cache/

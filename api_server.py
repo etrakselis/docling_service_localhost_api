@@ -1,10 +1,12 @@
 import io
 import os
+from dotenv import load_dotenv
 import time
 import logging
 import tempfile
 from pathlib import Path
 from typing import Optional
+
 
 import paramiko
 from fastapi import FastAPI, File, UploadFile
@@ -15,6 +17,10 @@ from docling.document_converter import DocumentConverter, PdfFormatOption
 from docling.datamodel.pipeline_options import PdfPipelineOptions, PictureDescriptionApiOptions
 from docling.datamodel.base_models import InputFormat
 from docling.chunking import HybridChunker
+
+# Load .env from the project root (where api_server.py lives)
+BASE_DIR = Path(__file__).parent
+load_dotenv(dotenv_path=BASE_DIR / ".env")
 
 # =============================
 # FastAPI Setup
@@ -35,9 +41,9 @@ logging.basicConfig(level=logging.INFO)
 # =============================
 LLM_MODEL = os.getenv("LLM_MODEL")
 LLM_BEARER_TOKEN = os.getenv("LLM_BEARER_TOKEN")
-LLM_MAX_COMPLTETION_TOKENS = os.getenv("LLM_MAX_COMPLETION_TOKENS")
+LLM_MAX_COMPLTETION_TOKENS = int(os.getenv("LLM_MAX_COMPLETION_TOKENS", 2000))
 
-HYBRID_CHUNKER_MAX_TOKENS = os.getenv("HYBRID_CHUNKER_MAX_TOKENS")
+HYBRID_CHUNKER_MAX_TOKENS = int(os.getenv("HYBRID_CHUNKER_MAX_TOKENS", 3000))
 
 SSH_HOST = os.getenv("SSH_HOST")
 SSH_USER = os.getenv("SSH_USER")
@@ -62,7 +68,7 @@ def vllm_local_options():
         params=dict(
             model=LLM_MODEL,
             seed=42,
-            max_completion_tokens={LLM_MAX_COMPLTETION_TOKENS},
+            max_completion_tokens=LLM_MAX_COMPLTETION_TOKENS,
         ),
         prompt=(
             "Always begin your response with 'IMAGE DESCRIPTION' then provide a detailed description of the image. "
@@ -180,7 +186,7 @@ async def convert_file(file: UploadFile = File(...)):
         # ----------------------------
         # Hybrid chunking
         # ----------------------------
-        chunker = HybridChunker(max_tokens={HYBRID_CHUNKER_MAX_TOKENS}, merge_peers=True)
+        chunker = HybridChunker(max_tokens=HYBRID_CHUNKER_MAX_TOKENS, merge_peers=True)
         chunks = list(chunker.chunk(dl_doc=doc))
 
         # ----------------------------

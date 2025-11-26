@@ -28,3 +28,6 @@ markdownify==0.12.1
 # --- Other dependencies used by Docling in pipelines ---
 numpy==1.26.4
 Pillow==10.3.0
+
+# --- Load .env files ---
+python-dotenv>=1.0.0
