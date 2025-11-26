@@ -1,0 +1,6 @@
+fastapi
+uvicorn[standard]
+paramiko
+docling
+python-multipart
+pydantic
